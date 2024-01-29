@@ -1,0 +1,25 @@
+﻿<!-- Views/Album/ShowSongs.cshtml -->
+@model AlbumApp.MVC.Models.AlbumViewModel
+
+<h2>"@Model.Name" by @Model.ArtistName (@Model.ReleaseDate.Year)</h2>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Track number</th>
+            <th>Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var song in Model.Songs)
+        {
+            <tr>
+                <td>@song.TrackNumber</td>
+                <td>@song.Title</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Album" asp-action="Index" class="btn btn-primary">Back to Album List</a>

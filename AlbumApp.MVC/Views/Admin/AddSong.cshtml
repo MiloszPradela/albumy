@@ -1,0 +1,28 @@
+﻿@model AlbumApp.MVC.Models.Admin.AddSongModel
+
+<h2>Add Song</h2>
+
+<form asp-controller="Admin" asp-action="AddSong" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AlbumId"></label>
+        <select asp-for="AlbumId" asp-items="@(new SelectList(ViewBag.Albums, "Value", "Text"))" class="form-control">
+        </select>
+        <span asp-validation-for="AlbumId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TrackNumber"></label>
+        <input asp-for="TrackNumber" type="number" class="form-control" />
+        <span asp-validation-for="TrackNumber" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Add Song</button>
+</form>

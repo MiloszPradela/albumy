@@ -1,0 +1,80 @@
+﻿@using System.Security.Claims
+@using System.Globalization
+@model List<AlbumApp.MVC.Models.AlbumViewModel>
+
+<h2>Album List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Artist</th>
+            <th>Rating</th>
+            <th>Release Date</th>
+            <th>Length</th>
+            <th>Actions</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var album in Model)
+        {
+            <tr>
+                <td>@album.Id</td>
+                <td>@album.Name</td>
+                <td>@album.ArtistName</td>
+                <td>
+                    @{
+                        double averageRating = album.Ratings.Any() ? album.Ratings.Average(r => r.Value) : 0;
+                    }
+                    @averageRating.ToString("0.##")
+                </td>
+
+                <td>@album.ReleaseDate.ToShortDateString()</td>
+                <td>@(album.Length.Minutes):@album.Length.Seconds</td>
+                <td>
+                    <a asp-controller="Album" asp-action="ShowSongs" asp-route-id="@album.Id" class="btn btn-primary">Show Songs</a>
+
+                <td>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                            var userHasRated = album.Ratings.Any(r => r.IdentityUserId == userId);
+
+                            @if (userHasRated)
+                            {
+                            <p>Already Rated: @album.Ratings.First(r => r.IdentityUserId == userId).Value</p>
+                            }
+                            else
+                            {
+                            <form asp-controller="Album" asp-action="RateAlbum" method="post">
+                                <input type="hidden" name="albumId" value="@album.Id" />
+                                <label for="rating">Rate:</label>
+                                <select name="rating" id="rating">
+                                        @for (int i = 1; i <= 10; i++)
+                                        {
+                                        <option value="@i">@i</option>
+                                        }
+                                </select>
+                                <button type="submit" class="btn btn-primary">Rate</button>
+                            </form>
+                            }
+                        }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (ViewBag.TotalPages > 1)
+{
+    <ul class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+            </li>
+        }
+    </ul>
+}

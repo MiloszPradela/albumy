@@ -1,0 +1,35 @@
+﻿@model AlbumApp.MVC.Models.Admin.AddAlbumModel
+
+<h2>Add Album</h2>
+
+<form asp-controller="Admin" asp-action="AddAlbum" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ArtistId"></label>
+        <select asp-for="ArtistId" asp-items="@(new SelectList(ViewBag.Artists, "Value", "Text"))" class="form-control">
+        </select>
+        <span asp-validation-for="ArtistId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ReleaseDate"></label>
+        <input asp-for="ReleaseDate" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="Length"></label>
+        <input asp-for="Length" type="text" class="form-control" pattern="^(\d{1,2}):(\d{1,2}):(\d{1,2})$" placeholder="HH:MM:SS" />
+        <span asp-validation-for="Length" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Add Album</button>
+</form>
